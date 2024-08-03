@@ -3,8 +3,9 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
 
-df = pd.read_csv('diabetes_hw6_dataset.csv')
+df = pd.read_csv('diabetes/diabetes_hw6_dataset.csv')
 #print(df.head())
+#print(df.tail(10))
 #print(df.info())
 #print(df.describe())
 #print(df.isnull().sum())
@@ -25,5 +26,32 @@ print(df.isnull().sum())
 df.rename(columns={'bmi': 'body_mass_index'}, inplace=True)
 df['body_mass_index'].value_counts()
 df['HbA1c_level'].value_counts()
+#df.corr(numeric_only=True)
 sns.heatmap(df.corr(numeric_only=True), annot=True)
 plt.show()
+df.loc[0, 'smoking_history']
+df.iloc[0, 4]
+df[df['age'] > 50]
+df[(df['diabetes'] == 'Possitive') & (df['body_mass_index'] < 25)]
+df[(df['gender'] == 'Female') & (df['heart_disease'] == 1)]
+df[(df['diabetes'] == 'Positive') | (df['hypertension'] == 1)]
+df[(df['age'] > 40) & (df['hypertension'] == 1) | (df['diabetes'] == 'Positive') & (df['body_mass_index'] < 30)]
+def classify_HbA1c_level(HbA1c_level):
+    if HbA1c_level < 5:
+        return 'low'
+    elif HbA1c_level >= 5 and HbA1c_level <= 7:
+        return 'medium'
+    else:
+        return 'high'
+
+df['HbA1c_level_category'] = df['HbA1c_level'].apply(classify_HbA1c_level)
+classify_HbA1c_level(7.5)
+plt.hist(df['age'], bins=10, color='skyblue', edgecolor='black')
+df['diabetes'].value_counts().plot(kind='bar')
+plt.scatter(df['body_mass_index'], df['blood_glucose_level'], color='red')
+plt.boxplot(df['HbA1c_level'])
+plt.boxplot(df['HbA1c_level'])
+df.boxplot(column='age', by='diabetes')
+#sns.distplot(df['body_mass_index'])
+sns.pairplot(df[['age', 'diabetes']])
+sns.boxplot(x='diabetes', y='HbA1c_level', data=df)
